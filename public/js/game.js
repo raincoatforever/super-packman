@@ -165,6 +165,15 @@ function draw() {
 	// Wipe the canvas clean
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	// draw rects
+
+	ctx.beginPath();
+    ctx.rect(40, 10, 10, 90);
+    ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+    ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+
 	/*if (booster%27==0) {
 			if(localPlayer.boost < 10)
 			localPlayer.boost++;
