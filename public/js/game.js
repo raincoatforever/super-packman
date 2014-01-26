@@ -6,7 +6,8 @@ var canvas,			// Canvas DOM element
 	keys,			// Keyboard input
 	localPlayer,
 	remotePlayers,	// Local player
-	socket;
+	socket,
+	maze;
 
 
 /**************************************************
@@ -16,12 +17,14 @@ function init() {
 	// Declare the canvas and rendering context
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
-
+	
 
 	booster = 0;
 	// Maximise the canvas
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+	
+	maze = [[10, 10, 7, canvas.height-20],[canvas.width - 10, 10, 7, canvas.height - 20], [10, 10, canvas.width - 20, 7], [10, canvas.height - 10 , canvas.width - 15, 7]];
 
 	// Initialise keyboard controls
 	keys = new Keys();
@@ -166,13 +169,18 @@ function draw() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	// draw rects
 
-	ctx.beginPath();
-    ctx.rect(40, 10, 10, 90);
-    ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
-    ctx.fill();
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = 'black';
-    ctx.stroke();
+	for (var i=0;i<maze.length;i++)
+	{
+		ctx.beginPath();
+		//ctx.rect(10, 10, 7, canvas.height-20);
+		ctx.rect(maze[i][0],maze[i][1],maze[i][2],maze[i][3])
+		ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+		ctx.fill();
+		ctx.lineWidth = 3;
+		ctx.strokeStyle = 'black';
+		ctx.stroke();	
+	}
+	
 
 	/*if (booster%27==0) {
 			if(localPlayer.boost < 10)
