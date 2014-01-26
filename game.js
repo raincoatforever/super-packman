@@ -43,14 +43,14 @@ var util = require("util"),
 	};
 
 	function onNewPlayer(data) {
-        var newPlayer = new Player(data.x, data.y);
+        var newPlayer = new Player(data.x, data.y,data.color);//'#'+Math.floor(Math.random()*16777215).toString(16));
         newPlayer.id = this.id;
-        this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY()});
+        this.broadcast.emit("new player", {id: newPlayer.id, x: newPlayer.getX(), y: newPlayer.getY(),color : newPlayer.getColor()});
 
         var i, existingPlayer;
         for (i = 0; i < players.length; i++) {
             existingPlayer = players[i];
-            this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY()});
+            this.emit("new player", {id: existingPlayer.id, x: existingPlayer.getX(), y: existingPlayer.getY(),color : existingPlayer.getColor()});
         };
         players.push(newPlayer);
 
@@ -66,13 +66,15 @@ var util = require("util"),
             return;
         };
 
+
+
         movePlayer.setX(data.x);
         movePlayer.setY(data.y);
 
         this.broadcast.emit("move player", {id: movePlayer.id, x: movePlayer.getX(), y: movePlayer.getY()});
 
 	};
-    
+
     function playerById(id) {
     var i;
     for (i = 0; i < players.length; i++) {

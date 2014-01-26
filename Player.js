@@ -1,6 +1,7 @@
-var Player = function(startX, startY) {
+var Player = function(startX, startY,colored) {
     var x = startX,
         y = startY,
+        color,//=colored,//='#'+Math.floor(Math.random()*16777215).toString(16),
         id;
     
     var getX = function() {
@@ -19,11 +20,19 @@ var Player = function(startX, startY) {
         y = newY;
     };
 
+    var getColor = function()
+    { return color;}
+
+    var setColor = function(newColor)
+    { color =newColor; }
+
     return {
         getX: getX,
         getY: getY,
+        getColor : getColor,
         setX: setX,
         setY: setY,
+        setColor : setColor,
         id: id
     }
 };

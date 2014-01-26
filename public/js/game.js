@@ -17,6 +17,8 @@ function init() {
 	canvas = document.getElementById("gameCanvas");
 	ctx = canvas.getContext("2d");
 
+
+	booster = 0;
 	// Maximise the canvas
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -31,7 +33,7 @@ function init() {
 		startY = Math.round(Math.random()*(canvas.height-5));
 
 	// Initialise the local player
-	localPlayer = new Player(startX, startY);
+	localPlayer = new Player(startX, startY,'#'+Math.floor(Math.random()*16777215).toString(16));
 	socket = io.connect("http://localhost", {port: 8000, transports: ["websocket"]});
 
 	remotePlayers = [];
@@ -89,8 +91,9 @@ function onSocketDisconnect() {
 };
 
 function onNewPlayer(data) {
-    console.log("New player connected: "+data.id);
-    var newPlayer = new Player(data.x, data.y);
+    console.log("New player connected: "+data.id)
+    var newPlayer = new Player(data.x, data.y,data.color);//'#'+Math.floor(Math.random()*16777215).toString(16));
+    console.log(newPlayer.getColor());
 	newPlayer.id = data.id;
 	remotePlayers.push(newPlayer);
 };
@@ -102,7 +105,8 @@ function onMovePlayer(data) {
 	    console.log("Player not found: "+data.id);
 	    return;
 	};
-
+	/*if(data.x <400 || data.y <400 )
+		return;*/
 	movePlayer.setX(data.x);
 	movePlayer.setY(data.y);
 };
@@ -137,6 +141,8 @@ function animate() {
 	update();
 	draw();
 
+
+
 	// Request a new animation frame using Paul Irish's shim
 	window.requestAnimFrame(animate);
 };
@@ -158,12 +164,25 @@ function update() {
 function draw() {
 	// Wipe the canvas clean
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+	// draw rects
+	/*if (booster%27==0) {
+			if(localPlayer.boost < 10)
+			localPlayer.boost++;
+	}
+	booster = (booster+1)%50;
+	*/
+	//ctx.lineWidth = 4;
 	// Draw the local player
-	localPlayer.draw(ctx);
-
+	localPlayer.draw("you",ctx,0,0);
+	//ctx.lineWidth = 1;
 	var i;
 	for (i = 0; i < remotePlayers.length; i++) {
-	    remotePlayers[i].draw(ctx);
+		var newx,newy;
+		var tempx = remotePlayers[i].getX();
+		var tempy = remotePlayers[i].getY();
+		newx = remotePlayers[i].getX() - localPlayer.getX()-canvas.width/2;
+		newy = remotePlayers[i].getY() - localPlayer.getY()-canvas.height/2;
+		//if((newx >0 )&&(newy>0)&&(newx<canvas.width)&&(newy<canvas.height))
+	    remotePlayers[i].draw("others",ctx,newx,newy);
 };
 };
